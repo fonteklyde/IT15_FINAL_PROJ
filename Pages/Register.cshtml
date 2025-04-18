@@ -1,0 +1,141 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow rounded-4">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">Create an account</h2>
+                    <form method="post" novalidate>
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label asp-for="NewUser.FullName" class="form-label"></label>
+                            <input asp-for="NewUser.FullName" class="form-control @(ViewData.ModelState["NewUser.FullName"]?.Errors.Count > 0 ? "is-invalid" : "")" />
+                            <span asp-validation-for="NewUser.FullName" class="text-danger"></span>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mb-3">
+                            <label asp-for="NewUser.Address" class="form-label"></label>
+                            <textarea asp-for="NewUser.Address" class="form-control @(ViewData.ModelState["NewUser.Address"]?.Errors.Count > 0 ? "is-invalid" : "")" rows="2"></textarea>
+                            <span asp-validation-for="NewUser.Address" class="text-danger"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="NewUser.Email" class="form-label"></label>
+                            <input asp-for="NewUser.Email" class="form-control @(ViewData.ModelState["NewUser.Email"]?.Errors.Count > 0 ? "is-invalid" : "")" />
+                            <span asp-validation-for="NewUser.Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3">
+                            <label asp-for="NewUser.Password" class="form-label"></label>
+                            <div class="input-group">
+                                <input asp-for="NewUser.Password" type="password" id="passwordInput" class="form-control @(ViewData.ModelState["NewUser.Password"]?.Errors.Count > 0 ? "is-invalid" : "")" />
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye-slash" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="NewUser.Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="NewUser.ConfirmPassword" class="form-label"></label>
+                            <div class="input-group">
+                                <input asp-for="NewUser.ConfirmPassword" type="password" id="confirmPasswordInput" class="form-control @(ViewData.ModelState["NewUser.ConfirmPassword"]?.Errors.Count > 0 ? "is-invalid" : "")" />
+                                <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                                    <i class="bi bi-eye-slash" id="toggleConfirmIcon"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="NewUser.ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mb-3">
+                            <label asp-for="NewUser.Role" class="form-label"></label>
+                            <select asp-for="NewUser.Role" class="form-select @(ViewData.ModelState["NewUser.Role"]?.Errors.Count > 0 ? "is-invalid" : "")">
+                                <option value="" disabled selected>-- Select Role --</option>
+                                <option value="Customer">Customer</option>
+                                <option value="Vendor">Vendor</option>
+                                <option value="Supplier">Supplier</option>
+                                <option value="Driver">Driver</option>
+                            </select>
+                            <span asp-validation-for="NewUser.Role" class="text-danger"></span>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn  rounded-pill py-2" style="background-color:#398007; color:white;">Register</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <small>Already have an account? <a href="/Login">Login here</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="successModalLabel">Registration Successful</h5>
+            </div>
+            <div class="modal-body">
+                Your account has been created successfully.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="modalOkButton">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('passwordInput');
+        const toggleIcon = document.getElementById('toggleIcon');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+        const toggleConfirmIcon = document.getElementById('toggleConfirmIcon');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleIcon.classList.toggle('bi-eye');
+            toggleIcon.classList.toggle('bi-eye-slash');
+        });
+
+        toggleConfirmPassword.addEventListener('click', function () {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            toggleConfirmIcon.classList.toggle('bi-eye');
+            toggleConfirmIcon.classList.toggle('bi-eye-slash');
+        });
+
+        @if (ViewData["ShowSuccessModal"] is true)
+        {
+            <text>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+                        successModal.show();
+
+                        document.getElementById('modalOkButton').addEventListener('click', function () {
+                            window.location.href = '/Login';
+                        });
+                    });
+            </text>
+        }
+    </script>
+}
+

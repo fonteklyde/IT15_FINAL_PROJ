@@ -1,0 +1,142 @@
+﻿@page
+@model IT15_Final_Proj.Pages.Admin.ManageUsersModel
+@{
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Manage Users</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Full Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Address</td>
+                    <td>@user.Email</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-user-id="@user.Id"
+                                data-user-name="@user.FullName"
+                                data-user-address="@user.Address"
+                                data-user-email="@user.Email"
+                                data-user-role="@user.Role">
+                            Edit
+                        </button>
+
+                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-user-id="@user.Id"
+                                data-user-name="@user.FullName">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-page-handler="Edit">
+            <div class="modal-content rounded-4">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Edit User</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="EditUser.Id" id="editUserId" />
+
+                    <div class="mb-3">
+                        <label for="editFullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="editFullName" name="EditUser.FullName" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editAddress" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="editAddress" name="EditUser.Address" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editEmail" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="EditUser.Email" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editRole" class="form-label">Role</label>
+                        <select class="form-select" id="editRole" name="EditUser.Role" required>
+                            <option>Admin</option>
+                            <option>Customer</option>
+                            <option>Vendor</option>
+                            <option>Supplier</option>
+                            <option>Driver</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-page-handler="Delete">
+            <div class="modal-content rounded-4">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="deleteUserId" name="DeleteUserId" />
+                    <p>Are you sure you want to delete <strong id="deleteUserName"></strong>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('editUserId').value = button.getAttribute('data-user-id');
+            document.getElementById('editFullName').value = button.getAttribute('data-user-name');
+            document.getElementById('editAddress').value = button.getAttribute('data-user-address');
+            document.getElementById('editEmail').value = button.getAttribute('data-user-email');
+            document.getElementById('editRole').value = button.getAttribute('data-user-role');
+        });
+
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('deleteUserId').value = button.getAttribute('data-user-id');
+            document.getElementById('deleteUserName').textContent = button.getAttribute('data-user-name');
+        });
+    </script>
+
+}
