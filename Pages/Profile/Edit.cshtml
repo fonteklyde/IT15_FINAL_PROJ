@@ -1,0 +1,118 @@
+﻿@page
+@model IT15_Final_Proj.Pages.Profile.EditModel
+@{
+}
+
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    <form id ="editProfileForm" method="post">
+        <div class="mb-3">
+            <label asp-for="UserProfile.FullName" class="form-label"></label>
+            <input asp-for="UserProfile.FullName" class="form-control" />
+            <span asp-validation-for="UserProfile.FullName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UserProfile.Address" class="form-label"></label>
+            <textarea asp-for="UserProfile.Address" class="form-control"></textarea>
+            <span asp-validation-for="UserProfile.Address" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UserProfile.Email" class="form-label"></label>
+            <input asp-for="UserProfile.Email" class="form-control"/>
+            <span asp-validation-for="UserProfile.Email" class="text-danger"></span>
+        </div>
+
+        <hr />
+
+        <h4>Change Password</h4>
+        <div class="mb-3">
+            <label asp-for="PasswordModel.CurrentPassword" class="form-label"></label>
+            <div class="input-group">
+                <input asp-for="PasswordModel.CurrentPassword" type="password" class="form-control" id="currentPassword" />
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('currentPassword', this)">
+                    <i class="bi bi-eye-slash"></i>
+                </button>
+            </div>
+            <span asp-validation-for="PasswordModel.CurrentPassword" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PasswordModel.NewPassword" class="form-label"></label>
+            <div class="input-group">
+                <input asp-for="PasswordModel.NewPassword" type="password" class="form-control" id="newPassword" />
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('newPassword', this)">
+                    <i class="bi bi-eye-slash"></i>
+                </button>
+            </div>
+            <span asp-validation-for="PasswordModel.NewPassword" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="PasswordModel.ConfirmPassword" class="form-label"></label>
+            <div class="input-group">
+                <input asp-for="PasswordModel.ConfirmPassword" type="password" class="form-control" id="confirmPassword" />
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('confirmPassword', this)">
+                    <i class="bi bi-eye-slash"></i>
+                </button>
+            </div>
+            <span asp-validation-for="PasswordModel.ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="d-grid">
+            <button type="button" class="btn rounded-pill" style="background:#398007; color:white" data-bs-toggle="modal" data-bs-target="#confirmSaveModal">Save Changes</button>
+        </div>
+    </form>
+
+    <div class="modal fade" id="confirmSaveModal" tabindex="-1" aria-labelledby="confirmSaveModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmSaveModalLabel">Confirm Changes</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to save these changes?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmSaveButton">Yes, Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById('confirmSaveButton').addEventListener('click', function () {
+            document.getElementById('editProfileForm').submit();
+        });
+    </script>
+
+    <script>
+        function togglePasswordVisibility(fieldId, button) {
+            const input = document.getElementById(fieldId);
+            const icon = button.querySelector("i");
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            } else {
+                input.type = "password";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            }
+        }
+    </script>
+}

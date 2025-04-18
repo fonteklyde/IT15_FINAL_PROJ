@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LogiHub</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/IT15_Final_Proj.styles.css" asp-append-version="true" />
+</head>
+
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    var fullName = HttpContextAccessor.HttpContext?.Session.GetString("FullName");
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+}
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" style="background-color: #398007;">
+            <div class="container">
+                <a class="navbar-brand text-light" asp-area="" asp-page="/Index">LogiHub</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <!-- Left-side nav (e.g., Home) -->
+                    <ul class="navbar-nav">
+
+                        @if (role == "Admin")
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/ManageUsers">Manage Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">System Logs</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Settings</a>
+                            </li>
+                        }
+                        @if (role == "Vendor")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Supplier Connect</a>
+                            </li>
+                        }
+                        @if (role == "Customer")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Track Shipment</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Support</a>
+                            </li>
+                        }
+                        @if (role == "Supplier")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Inventory Supply</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Vendor Requests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Report</a>
+                            </li>
+                        }
+                        @if (role == "Driver")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Inventory Supply</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Vendor Requests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Report</a>
+                            </li>
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav ms-auto">
+                        @if (!string.IsNullOrEmpty(role))
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Profile/Edit">Edit Profile</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="footer border-top footer text-muted">
+        <div class="container" style="color:white;">
+            &copy; 2025 - LogiHub - <a class="text-light" asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    <script>
+        let sessionTimeoutMinutes = 1; // Adjust based on your actual session timeout setting
+        let warningTimeInMs = sessionTimeoutMinutes * 60 * 1000;
+
+        setTimeout(() => {
+            window.location.href = '/Login?loggedOut=true';
+        }, warningTimeInMs);
+    </script>
+
+</body>
+</html>
