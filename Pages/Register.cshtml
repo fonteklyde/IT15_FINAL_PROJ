@@ -45,7 +45,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="NewUser.ConfirmPassword" class="form-label"></label>
+                            <label class="form-label">Confirm Password</label>
                             <div class="input-group">
                                 <input asp-for="NewUser.ConfirmPassword" type="password" id="confirmPasswordInput" class="form-control @(ViewData.ModelState["NewUser.ConfirmPassword"]?.Errors.Count > 0 ? "is-invalid" : "")" />
                                 <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
@@ -59,7 +59,7 @@
                         <div class="mb-3">
                             <label asp-for="NewUser.Role" class="form-label"></label>
                             <select asp-for="NewUser.Role" class="form-select @(ViewData.ModelState["NewUser.Role"]?.Errors.Count > 0 ? "is-invalid" : "")">
-                                <option value="" disabled selected>-- Select Role --</option>
+                                <option value="" disabled selected>Select Role...</option>
                                 <option value="Customer">Customer</option>
                                 <option value="Vendor">Vendor</option>
                                 <option value="Supplier">Supplier</option>
@@ -77,7 +77,7 @@
             </div>
 
             <div class="text-center mt-3">
-                <small>Already have an account? <a href="/Login">Login here</a></small>
+                <small>Already have an account? <a href="/Login" class="text-decoration-none" style="color: #398007;">Login here</a></small>
             </div>
         </div>
     </div>
