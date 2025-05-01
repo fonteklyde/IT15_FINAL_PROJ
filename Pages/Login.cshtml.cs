@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using IT15_Final_Proj.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-
+using IT15_Final_Proj.Models;
 public class LoginModel : PageModel
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -64,7 +64,9 @@ public class LoginModel : PageModel
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.FullName),
+            new Claim(ClaimTypes.Name, user.FirstName),
+             new Claim(ClaimTypes.Name, user.MiddleName),
+              new Claim(ClaimTypes.Name, user.LastName),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Role)
         };
@@ -75,7 +77,9 @@ public class LoginModel : PageModel
         await HttpContext.SignInAsync("Cookies", principal);
 
         HttpContext.Session.SetString("Email", user.Email);
-        HttpContext.Session.SetString("FullName", user.FullName);
+        HttpContext.Session.SetString("FullName", user.FirstName);
+        HttpContext.Session.SetString("FullName", user.MiddleName);
+        HttpContext.Session.SetString("FullName", user.LastName);
         HttpContext.Session.SetString("Role", user.Role);
 
         LoginAttemptTracker.ResetAttempts(Input.Email);

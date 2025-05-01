@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using IT15_Final_Proj.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-
+using IT15_Final_Proj.Models;
 namespace IT15_Final_Proj.Pages.Profile
 {
     public class EditModel : PageModel
@@ -65,7 +65,9 @@ namespace IT15_Final_Proj.Pages.Profile
             if (existingUser == null)
                 return RedirectToPage("/Login");
 
-            existingUser.FullName = UserProfile.FullName;
+            existingUser.FirstName = UserProfile.FirstName;
+            existingUser.MiddleName = UserProfile.MiddleName;
+            existingUser.LastName = UserProfile.LastName;
             existingUser.Address = UserProfile.Address;
             existingUser.Email = UserProfile.Email;
 
@@ -92,7 +94,9 @@ namespace IT15_Final_Proj.Pages.Profile
             await _context.SaveChangesAsync();
 
             HttpContext.Session.SetString("Email", existingUser.Email); // Update session
-            HttpContext.Session.SetString("FullName", existingUser.FullName);
+            HttpContext.Session.SetString("FullName", existingUser.FirstName);
+            HttpContext.Session.SetString("FullName", existingUser.MiddleName);
+            HttpContext.Session.SetString("FullName", existingUser.LastName);
             HttpContext.Session.SetString("Address", existingUser.Address);
 
             TempData["SuccessMessage"] = "Profile updated successfully!";

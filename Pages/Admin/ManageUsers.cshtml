@@ -13,10 +13,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
-                <th>Full Name</th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
                 <th>Address</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -27,14 +30,18 @@
             @foreach (var user in Model.Users)
             {
                 <tr>
-                    <td>@user.FullName</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.MiddleName</td>
+                    <td>@user.LastName</td>
                     <td>@user.Address</td>
                     <td>@user.Email</td>
                     <td>@user.Role</td>
                     <td>
                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#editModal"
                                 data-user-id="@user.Id"
-                                data-user-name="@user.FullName"
+                                data-user-firstname="@user.FirstName"
+                                data-user-middlename="@user.MiddleName"
+                                data-user-lastname="@user.LastName"
                                 data-user-address="@user.Address"
                                 data-user-email="@user.Email"
                                 data-user-role="@user.Role">
@@ -43,7 +50,7 @@
 
                         <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                 data-user-id="@user.Id"
-                                data-user-name="@user.FullName">
+                                data-user-name="@user.FirstName @user.LastName">
                             Delete
                         </button>
                     </td>
@@ -51,9 +58,9 @@
             }
         </tbody>
     </table>
-
 </div>
 
+<!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" asp-page-handler="Edit">
@@ -65,8 +72,18 @@
                     <input type="hidden" name="EditUser.Id" id="editUserId" />
 
                     <div class="mb-3">
-                        <label for="editFullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="editFullName" name="EditUser.FullName" required />
+                        <label for="editFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="editFirstName" name="EditUser.FirstName" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editMiddleName" class="form-label">Middle Name</label>
+                        <input type="text" class="form-control" id="editMiddleName" name="EditUser.MiddleName" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="editLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="editLastName" name="EditUser.LastName" required />
                     </div>
 
                     <div class="mb-3">
@@ -99,6 +116,7 @@
     </div>
 </div>
 
+<!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" asp-page-handler="Delete">
@@ -125,7 +143,9 @@
         editModal.addEventListener('show.bs.modal', function (event) {
             const button = event.relatedTarget;
             document.getElementById('editUserId').value = button.getAttribute('data-user-id');
-            document.getElementById('editFullName').value = button.getAttribute('data-user-name');
+            document.getElementById('editFirstName').value = button.getAttribute('data-user-firstname');
+            document.getElementById('editMiddleName').value = button.getAttribute('data-user-middlename');
+            document.getElementById('editLastName').value = button.getAttribute('data-user-lastname');
             document.getElementById('editAddress').value = button.getAttribute('data-user-address');
             document.getElementById('editEmail').value = button.getAttribute('data-user-email');
             document.getElementById('editRole').value = button.getAttribute('data-user-role');
@@ -138,5 +158,4 @@
             document.getElementById('deleteUserName').textContent = button.getAttribute('data-user-name');
         });
     </script>
-
 }

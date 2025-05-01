@@ -2,6 +2,7 @@ using IT15_Final_Proj.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authorization;
+using IT15_Final_Proj.Models;
 
 namespace IT15_Final_Proj.Pages.Admin
 
@@ -34,7 +35,9 @@ namespace IT15_Final_Proj.Pages.Admin
             var user = _context.Users.Find(EditUser.Id);
             if (user != null)
             {
-                user.FullName = EditUser.FullName;
+                user.FirstName = EditUser.FirstName;
+                user.MiddleName = EditUser.MiddleName;
+                user.LastName = EditUser.LastName;
                 user.Address = EditUser.Address;
                 user.Email = EditUser.Email;
                 user.Role = EditUser.Role;
@@ -58,3 +61,4 @@ namespace IT15_Final_Proj.Pages.Admin
         }
     }
 }
+

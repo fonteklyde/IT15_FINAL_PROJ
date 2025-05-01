@@ -2,7 +2,7 @@ using IT15_Final_Proj.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Identity;
-
+using IT15_Final_Proj.Models;
 public class RegisterModel : PageModel
 {
     private readonly AppDbContext _context;

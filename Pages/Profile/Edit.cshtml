@@ -14,9 +14,21 @@
     }
     <form id ="editProfileForm" method="post">
         <div class="mb-3">
-            <label asp-for="UserProfile.FullName" class="form-label"></label>
-            <input asp-for="UserProfile.FullName" class="form-control" />
-            <span asp-validation-for="UserProfile.FullName" class="text-danger"></span>
+            <label asp-for="UserProfile.FirstName" class="form-label"></label>
+            <input asp-for="UserProfile.FirstName" class="form-control" />
+            <span asp-validation-for="UserProfile.FirstName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UserProfile.MiddleName" class="form-label"></label>
+            <input asp-for="UserProfile.MiddleName" class="form-control" />
+            <span asp-validation-for="UserProfile.MiddleName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="UserProfile.LastName" class="form-label"></label>
+            <input asp-for="UserProfile.LastName" class="form-control" />
+            <span asp-validation-for="UserProfile.LastName" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
