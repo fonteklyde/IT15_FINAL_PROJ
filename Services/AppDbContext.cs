@@ -9,5 +9,6 @@ namespace IT15_Final_Proj.Services
             : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; }
     }
 }

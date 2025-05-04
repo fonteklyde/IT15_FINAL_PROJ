@@ -6,6 +6,7 @@ using IT15_Final_Proj.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using IT15_Final_Proj.Models;
+
 public class LoginModel : PageModel
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -30,8 +31,7 @@ public class LoginModel : PageModel
         public string Password { get; set; }
     }
 
-    public void OnGet() {
-    }
+    public void OnGet() { }
 
     public async Task<IActionResult> OnPostAsync()
     {
@@ -62,13 +62,13 @@ public class LoginModel : PageModel
             return Page();
         }
 
+        // Create claims for the user
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.FirstName),
-             new Claim(ClaimTypes.Name, user.MiddleName),
-              new Claim(ClaimTypes.Name, user.LastName),
+            new Claim(ClaimTypes.Name, $"{user.FirstName} {user.MiddleName} {user.LastName}"), // Combine names into one claim
             new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use NameIdentifier for the user's unique ID
         };
 
         var identity = new ClaimsIdentity(claims, "Cookies");
@@ -76,28 +76,28 @@ public class LoginModel : PageModel
 
         await HttpContext.SignInAsync("Cookies", principal);
 
+        // Store full name and role in session
         HttpContext.Session.SetString("Email", user.Email);
-        HttpContext.Session.SetString("FullName", user.FirstName);
-        HttpContext.Session.SetString("FullName", user.MiddleName);
-        HttpContext.Session.SetString("FullName", user.LastName);
+        HttpContext.Session.SetString("FullName", $"{user.FirstName} {user.MiddleName} {user.LastName}"); // Full name in one session key
         HttpContext.Session.SetString("Role", user.Role);
 
         LoginAttemptTracker.ResetAttempts(Input.Email);
 
+        // Redirect based on user role
         switch (user.Role)
         {
             case "Admin":
                 return RedirectToPage("/Admin/Dashboard");
             case "Customer":
-                return RedirectToPage("/Admin/Dashboard");
+                return RedirectToPage("/Customer/Dashboard");
             case "Vendor":
-                return RedirectToPage("/Admin/Dashboard");
+                return RedirectToPage("/Vendor/Dashboard");
             case "Supplier":
-                return RedirectToPage("/Admin/Dashboard");
+                return RedirectToPage("/Supplier/Dashboard");
             case "Driver":
-                return RedirectToPage("/Admin/Dashboard");
+                return RedirectToPage("/Driver/Dashboard");
             default:
-                return RedirectToPage("/Index"); // fallback
+                return RedirectToPage("/Index"); // Fallback in case no role matches
         }
     }
 }
