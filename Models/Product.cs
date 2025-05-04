@@ -12,7 +12,6 @@ namespace IT15_Final_Proj.Models
         public string Name { get; set; }
 
         [NotMapped]
-        [Required]
         public IFormFile ProductImage { get; set; }
 
         public string PictureUrl { get; set; }

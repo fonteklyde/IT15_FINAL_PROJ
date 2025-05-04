@@ -25,8 +25,10 @@ namespace IT15_Final_Proj.Pages.Supplier
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-                return Page();
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
 
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -54,7 +56,7 @@ namespace IT15_Final_Proj.Pages.Supplier
             _context.Products.Add(Product);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("/Supplier/ViewProducts");
+            return RedirectToPage("/Supplier/Products");
         }
     }
 }
