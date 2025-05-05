@@ -10,5 +10,7 @@ namespace IT15_Final_Proj.Services
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
+
+        public DbSet<LoginLog> LoginLogs { get; set; }
     }
 }

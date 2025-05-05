@@ -83,6 +83,14 @@ public class LoginModel : PageModel
 
         LoginAttemptTracker.ResetAttempts(Input.Email);
 
+        _context.LoginLogs.Add(new LoginLog
+        {
+            Email = user.Email,
+            Role = user.Role,
+            Timestamp = DateTime.Now
+        });
+        await _context.SaveChangesAsync();
+
         // Redirect based on user role
         switch (user.Role)
         {

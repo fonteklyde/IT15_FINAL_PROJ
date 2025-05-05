@@ -1,0 +1,27 @@
+﻿@page
+@model IT15_Final_Proj.Pages.LogsModel
+@{
+	ViewData["Title"] = "Login Logs";
+}
+
+<h2>Login Logs</h2>
+
+<table class="table table-bordered mt-3">
+    <thead class="thead-dark">
+        <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Login Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model.Logs)
+        {
+            <tr>
+                <td>@log.Email</td>
+                <td>@log.Role</td>
+                <td>@log.Timestamp.ToString("g")</td>
+            </tr>
+        }
+    </tbody>
+</table>
