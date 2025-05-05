@@ -1,14 +1,14 @@
 ﻿@page
-@model IT15_Final_Proj.Pages.Supplier.ProductsModel
+@model IT15_Final_Proj.Pages.Vendor.ProductsModel
 @{
-    ViewData["Title"] = "My Products";
+    ViewData["Title"] = "All Available Products";
 }
 
-<h2 class="text-2xl font-bold mb-4">My Products</h2>
+<h2 class="text-2xl font-bold mb-4">All Supplier Products</h2>
 
 @if (Model.Products == null || !Model.Products.Any())
 {
-    <p>You haven't added any products yet.</p>
+    <p>No products available at the moment.</p>
 }
 else
 {
@@ -19,7 +19,7 @@ else
                 <th class="p-2 border">Price</th>
                 <th class="p-2 border">Quantity</th>
                 <th class="p-2 border">Image</th>
-                <th class="p-2 border">Actions</th>
+                <th class="p-2 border">Supplier ID</th>
             </tr>
         </thead>
         <tbody>
@@ -30,12 +30,9 @@ else
                     <td class="p-2 border">₱@product.Price</td>
                     <td class="p-2 border">@product.Quantity</td>
                     <td class="p-2 border">
-                        <img src="@product.PictureUrl" alt="@product.Name" style="width: 150px; height: 150px;" />
+                        <img src="@product.PictureUrl" alt="@product.Name" style="width: 120px; height: auto;" />
                     </td>
-                    <td class="p-2 border">
-                        <a asp-page="/Supplier/Edit" asp-route-id="@product.Id" class="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-1 px-3 rounded mr-2">Edit</a>
-                        <a asp-page="/Supplier/Delete" asp-route-id="@product.Id" class="bg-red-600 hover:bg-red-700 text-black font-semibold py-1 px-3 rounded">Delete</a>
-                    </td>
+                    <td class="p-2 border">@product.UserId</td> @* assuming UserId is the supplier's ID *@
                 </tr>
             }
         </tbody>

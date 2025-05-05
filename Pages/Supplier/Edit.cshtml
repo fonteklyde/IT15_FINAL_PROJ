@@ -1,0 +1,54 @@
+﻿@page "{id:int}"
+@model IT15_Final_Proj.Pages.Supplier.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit Product</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Product.Id" />
+
+    <div class="form-group">
+        <label asp-for="Product.Name"></label>
+        <input asp-for="Product.Name" class="form-control" />
+        <span asp-validation-for="Product.Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Product.Price"></label>
+        <input asp-for="Product.Price" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="Product.Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Product.Quantity"></label>
+        <input asp-for="Product.Quantity" class="form-control" type="number" />
+        <span asp-validation-for="Product.Quantity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Current Image</label><br />
+        <img src="@Model.Product.PictureUrl" alt="Product Image" style="width: 120px; height: auto;" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductImage">New Image</label>
+        <input asp-for="ProductImage" class="form-control" type="file" />
+        <span asp-validation-for="ProductImage" class="text-danger"></span>
+    </div>
+
+    <br />
+    <div class="mt-4">
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-black font-bold py-2 px-4 rounded">
+            UPDATE
+        </button>
+        <a asp-page="/Supplier/Products" class="ml-2 bg-red-400 hover:bg-red-500 text-black font-bold py-2 px-4 rounded inline-block">
+            CANCEL
+        </a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
