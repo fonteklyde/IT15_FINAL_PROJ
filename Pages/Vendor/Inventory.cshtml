@@ -1,0 +1,41 @@
+﻿@page
+@model IT15_Final_Proj.Pages.Vendor.InventoryModel
+@{
+}
+
+<h2 class="text-2xl font-bold mb-4">Your Inventory</h2>
+
+@if (Model.PurchasedProducts != null && Model.PurchasedProducts.Any())
+{
+    <table class="table-auto w-full border border-collapse border-gray-300">
+        <thead class="bg-green-700 text-black">
+            <tr class="text-center">
+                <th class="p-2 border">Image</th>
+                <th class="p-2 border">Product Name</th>
+                <th class="p-2 border">Original Price</th>
+                <th class="p-2 border">Selling Price</th>
+                <th class="p-2 border">Quantity Purchased</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.PurchasedProducts)
+            {
+                <tr class="text-center">
+                    <td class="p-2 border">
+                        <img src="@product.PictureUrl" alt="Image of @product.Name" class="w-20 h-20 object-cover mx-auto rounded" style="height: 150px; width: 150px;"/>
+                    </td>
+                    <td class="p-2 border">@product.Name</td>
+                    <td class="p-2 border">₱@product.Price</td>
+                    <td class="p-2 border">₱@product.MarkupPrice</td>
+                    <td class="p-2 border">@product.QuantityPurchased</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}
+else
+{
+    <p>No purchased products in your inventory.</p>
+}

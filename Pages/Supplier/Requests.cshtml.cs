@@ -34,9 +34,9 @@ namespace IT15_Final_Proj.Pages.Supplier
         public async Task<IActionResult> OnPostApproveAsync(int requestId)
         {
             var request = await _context.ProductRequests.FindAsync(requestId);
-            if (request != null && request.Status == "pending")
+            if (request != null && request.Status == "PENDING")
             {
-                request.Status = "payment";
+                request.Status = "APPROVED";
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Request approved.";
             }
@@ -46,9 +46,9 @@ namespace IT15_Final_Proj.Pages.Supplier
         public async Task<IActionResult> OnPostDenyAsync(int requestId)
         {
             var request = await _context.ProductRequests.FindAsync(requestId);
-            if (request != null && request.Status == "pending")
+            if (request != null && request.Status == "PENDING")
             {
-                request.Status = "denied";
+                request.Status = "DENIED";
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Request denied.";
             }

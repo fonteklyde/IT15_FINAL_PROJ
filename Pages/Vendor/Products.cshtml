@@ -4,12 +4,9 @@
     ViewData["Title"] = "All Available Products";
 }
 
-
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="bg-green-100 text-green-800 border border-green-400 p-2 rounded mb-4">
-        @TempData["SuccessMessage"]
-    </div>
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 
 <h2 class="text-2xl font-bold mb-4">All Supplier Products</h2>
@@ -20,45 +17,123 @@
 }
 else
 {
-
-    <table class="table-auto w-full border border-collapse border-gray-300">
+    <table class="table-auto w-full border border-collapse border-gray-300 mb-6">
         <thead class="bg-green-700 text-black">
             <tr>
                 <th class="p-2 border">Name</th>
                 <th class="p-2 border">Price</th>
                 <th class="p-2 border">Quantity</th>
                 <th class="p-2 border">Image</th>
-                <th class="p-2 border">Supplier ID</th>
+                <th class="p-2 border">Supplier Email</th>
                 <th class="p-2 border">Actions</th>
-                <th class="p-2 border">Status</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var product in Model.Products)
             {
-                var status = Model.Requests
-                .FirstOrDefault(r => r.ProductId == product.Id)?.Status ?? "Not Requested";
-
                 <tr class="text-center">
                     <td class="p-2 border">@product.Name</td>
                     <td class="p-2 border">₱@product.Price</td>
                     <td class="p-2 border">@product.Quantity</td>
                     <td class="p-2 border">
-                        <img src="@product.PictureUrl" alt="@product.Name" style="width: 120px; height: auto;" />
+                        <img src="@product.PictureUrl" alt="@product.Name" style="width: 150px; height: 150px;" />
                     </td>
-                    <td class="p-2 border">@product.UserId
-                    </td> @* assuming UserId is the supplier's ID *@
+                    <td class="p-2 border">@product.SupplierEmail</td>
                     <td class="p-2 border">
-                        <form method="post" asp-page-handler="Request">
-                            <input type="hidden" name="productId" value="@product.Id" />
-                            <button type="submit" class="btn w-100" style="background-color:#398007; color:white">
-                                Request
-                            </button>
-                        </form>
+                        <button type="button"
+                                class="btn btn-success"
+                                data-bs-toggle="modal"
+                                data-bs-target="#requestModal"
+                                data-product-id="@product.Id">
+                            Request Product
+                        </button>
                     </td>
-                    <td class="p-2 border">@status</td>
                 </tr>
             }
         </tbody>
     </table>
 }
+
+@if (Model.VendorRequests != null && Model.VendorRequests.Any())
+{
+    <h2 class="text-2xl font-bold mb-4">Your Product Requests</h2>
+    <table class="table-auto w-full border border-collapse border-gray-300">
+        <thead class="bg-blue-700 text-black">
+            <tr class="text-center">
+                <th class="p-2 border">Product Name</th>
+                <th class="p-2 border">Quantity</th>
+                <th class="p-2 border">Supplier Email</th>
+                <th class="p-2 border">Requested At</th>
+                <th class="p-2 border">Status</th>
+                <th class="p-2 border">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var request in Model.VendorRequests)
+            {
+                var product = Model.Products.FirstOrDefault(p => p.Id == request.ProductId);
+                <tr class="text-center">
+                    <td class="p-2 border">@product?.Name</td>
+                    <td class="p-2 border">@request.Quantity</td>
+                    <td class="p-2 border">@request.SupplierEmail</td>
+                    <td class="p-2 border">@request.RequestedAt.ToString("g")</td>
+                    <td class="p-2 border">
+                        @request.Status
+                        @if (request.Status == "APPROVED")
+                        {
+                            <form method="get" asp-page="/Vendor/Payment">
+                                <input type="hidden" name="requestId" value="@request.Id" />
+                                <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded ml-2">
+                                    Payment
+                                </button>
+                            </form>
+                        }
+                    </td>
+                    <td class="p-2 border">
+                        @if (request.Status == "PENDING")
+                        {
+                            <form method="post" asp-page-handler="Cancel" asp-route-id="@request.Id"
+                                  onsubmit="return confirm('Are you sure you want to cancel this request?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<!-- Request Product Modal -->
+<div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-page-handler="Request">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">Request Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="ProductId" id="modalProductId" />
+                    <div class="mb-3">
+                        <label for="Quantity" class="form-label">Quantity</label>
+                        <input type="number" name="Quantity" id="Quantity" class="form-control" min="1" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Request</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var requestModal = document.getElementById('requestModal');
+    requestModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var productId = button.getAttribute('data-product-id');
+        var input = requestModal.querySelector('#modalProductId');
+        input.value = productId;
+    });
+</script>

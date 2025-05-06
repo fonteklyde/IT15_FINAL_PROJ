@@ -6,6 +6,7 @@ using IT15_Final_Proj.Services;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using IT15_Final_Proj.Models;
+using Microsoft.AspNetCore.Http;
 
 public class LoginModel : PageModel
 {
@@ -80,6 +81,7 @@ public class LoginModel : PageModel
         HttpContext.Session.SetString("Email", user.Email);
         HttpContext.Session.SetString("FullName", $"{user.FirstName} {user.MiddleName} {user.LastName}"); // Full name in one session key
         HttpContext.Session.SetString("Role", user.Role);
+        HttpContext.Session.SetString("UserId", user.Id.ToString());
 
         LoginAttemptTracker.ResetAttempts(Input.Email);
 
