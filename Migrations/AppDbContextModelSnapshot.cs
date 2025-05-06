@@ -76,6 +76,39 @@ namespace IT15_Final_Proj.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("IT15_Final_Proj.Models.ProductRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VendorEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductRequests");
+                });
+
             modelBuilder.Entity("IT15_Final_Proj.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -116,6 +149,17 @@ namespace IT15_Final_Proj.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("IT15_Final_Proj.Models.ProductRequest", b =>
+                {
+                    b.HasOne("IT15_Final_Proj.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 #pragma warning restore 612, 618
         }

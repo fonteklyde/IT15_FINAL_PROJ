@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Http;
 
 namespace IT15_Final_Proj.Models

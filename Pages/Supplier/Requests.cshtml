@@ -1,0 +1,61 @@
+﻿@page
+@model IT15_Final_Proj.Pages.Supplier.RequestsModel
+@{ 
+	ViewData["Title"] = "Incoming Product Requests";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="bg-green-100 text-green-800 border border-green-400 p-2 rounded mb-4">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<h2 class="text-2xl font-bold mb-4">Incoming Product Requests</h2>
+
+@if (Model.Requests == null || !Model.Requests.Any())
+{
+    <p>No product requests at the moment.</p>
+}
+else
+{
+    <table class="table-auto w-full border border-collapse border-gray-300">
+        <thead class="bg-green-700 text-black">
+            <tr>
+                <th class="p-2 border">Product Name</th>
+                <th class="p-2 border">Vendor Email</th>
+                <th class="p-2 border">Status</th>
+                <th class="p-2 border">Actions</th>
+                <th class="p-2 border">Requested At</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var req in Model.Requests)
+            {
+                <tr class="text-center">
+                    <td class="p-2 border">@req.Product.Name</td>
+                    <td class="p-2 border">@req.VendorEmail</td>
+                    <td class="p-2 border">@req.Status</td>
+                    <td class="p-2 border">
+                        @if (req.Status == "PENDING")
+                        {
+                            <form method="post" asp-page-handler="Approve" style="display:inline;">
+                                <input type="hidden" name="requestId" value="@req.Id" />
+                                <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded" style="background-color:#398007; color:white">Approve</button>
+                            </form>
+                            <form method="post" asp-page-handler="Deny" style="display:inline;">
+                                <input type="hidden" name="requestId" value="@req.Id" />
+                                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded" style="background-color:#398007; color:white">Deny</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="italic text-gray-500">No actions</span>
+                        }
+                    </td>
+                    <td class="p-2 border">@req.RequestedAt.ToString("g")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

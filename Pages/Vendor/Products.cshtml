@@ -4,6 +4,14 @@
     ViewData["Title"] = "All Available Products";
 }
 
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="bg-green-100 text-green-800 border border-green-400 p-2 rounded mb-4">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <h2 class="text-2xl font-bold mb-4">All Supplier Products</h2>
 
 @if (Model.Products == null || !Model.Products.Any())
@@ -12,6 +20,7 @@
 }
 else
 {
+
     <table class="table-auto w-full border border-collapse border-gray-300">
         <thead class="bg-green-700 text-black">
             <tr>
@@ -20,11 +29,16 @@ else
                 <th class="p-2 border">Quantity</th>
                 <th class="p-2 border">Image</th>
                 <th class="p-2 border">Supplier ID</th>
+                <th class="p-2 border">Actions</th>
+                <th class="p-2 border">Status</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var product in Model.Products)
             {
+                var status = Model.Requests
+                .FirstOrDefault(r => r.ProductId == product.Id)?.Status ?? "Not Requested";
+
                 <tr class="text-center">
                     <td class="p-2 border">@product.Name</td>
                     <td class="p-2 border">₱@product.Price</td>
@@ -32,7 +46,17 @@ else
                     <td class="p-2 border">
                         <img src="@product.PictureUrl" alt="@product.Name" style="width: 120px; height: auto;" />
                     </td>
-                    <td class="p-2 border">@product.UserId</td> @* assuming UserId is the supplier's ID *@
+                    <td class="p-2 border">@product.UserId
+                    </td> @* assuming UserId is the supplier's ID *@
+                    <td class="p-2 border">
+                        <form method="post" asp-page-handler="Request">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <button type="submit" class="btn w-100" style="background-color:#398007; color:white">
+                                Request
+                            </button>
+                        </form>
+                    </td>
+                    <td class="p-2 border">@status</td>
                 </tr>
             }
         </tbody>

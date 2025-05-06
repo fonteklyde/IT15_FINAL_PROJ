@@ -12,5 +12,7 @@ namespace IT15_Final_Proj.Services
         public DbSet<Product> Products { get; set; }
 
         public DbSet<LoginLog> LoginLogs { get; set; }
+        public DbSet<ProductRequest> ProductRequests { get; set; }
+
     }
 }
