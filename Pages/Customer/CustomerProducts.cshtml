@@ -1,31 +1,82 @@
 ﻿@page
 @model IT15_Final_Proj.Pages.Customer.CustomerProductsModel
 @{
-	ViewData["Title"] = "Available Products";
+    ViewData["Title"] = "Available Products";
 }
 
 <h2 class="text-2xl font-bold mb-4">Available Products</h2>
 
-<form method="get" class="mb-6">
+<form method="get" class="mb-4">
     <input type="text" name="SearchTerm" value="@Model.SearchTerm" placeholder="Search product name..."
            class="p-2 border rounded w-1/2" />
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded ml-2">Search</button>
+    <button type="submit" class="btn btn-primary ms-2">Search</button>
 </form>
 
-
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="row">
     @foreach (var item in Model.VendorProducts)
     {
-        <div class="border rounded-lg p-4 shadow-md">
-            <img src="@item.PictureUrl" alt="@item.Name" class="w-full h-48 object-cover rounded mb-3" style="display: block; margin:auto; width:50%;" />
-            <h3 class="text-lg font-semibold">@item.Name</h3>
-            <p class="text-gray-700">₱@item.SellingPrice.ToString("F2")</p>
-            <p class="text-sm text-green-600">Available Stock: @item.Quantity</p>
-            <p class="text-sm text-gray-500 mb-2">Seller: @item.VendorEmail</p>
-            <form method="post" asp-page="/Customer/Cart">
-                <input type="hidden" name="ProductId" value="@item.ProductId" />
-                <input type="hidden" name="VendorEmail" value="@item.VendorEmail" />
-                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded">Add to Cart</button>
-            </form>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="@item.PictureUrl" class="card-img-top" style="height: 200px; object-fit: cover;" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">₱@item.SellingPrice.ToString("F2")</p>
+                    <p>Stock: @item.Quantity</p>
+                    <p><small class="text-muted">Seller: @item.VendorEmail</small></p>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addToCartModal"
+                            data-productid="@item.ProductId"
+                            data-productname="@item.Name"
+                            data-vendoremail="@item.VendorEmail"
+                            data-maxquantity="@item.Quantity">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
         </div>
     }
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="post" asp-page-handler="AddToCart">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addToCartModalLabel">Add to Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="ProductId" id="productId" />
+                    <input type="hidden" name="VendorEmail" id="vendorEmail" />
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" name="Quantity" id="quantity" min="1" required />
+                        <div class="form-text" id="quantityHint"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Add</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const modal = document.getElementById('addToCartModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const productId = button.getAttribute('data-productid');
+            const vendorEmail = button.getAttribute('data-vendoremail');
+            const maxQuantity = button.getAttribute('data-maxquantity');
+            const productName = button.getAttribute('data-productname');
+
+            modal.querySelector('#productId').value = productId;
+            modal.querySelector('#vendorEmail').value = vendorEmail;
+            modal.querySelector('#quantity').max = maxQuantity;
+            modal.querySelector('#quantityHint').textContent = `Available stock: ${maxQuantity}`;
+        });
+    </script>
+}

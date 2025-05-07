@@ -53,6 +53,43 @@ namespace IT15_Final_Proj.Pages.Customer
                 .Where(p => p.Quantity > 0)
                 .ToListAsync();
         }
+        [BindProperty]
+        public int ProductId { get; set; }
+
+        [BindProperty]
+        public string VendorEmail { get; set; }
+
+        [BindProperty]
+        public int Quantity { get; set; }
+
+        public async Task<IActionResult> OnPostAddToCartAsync()
+        {
+            if (Quantity <= 0)
+                return RedirectToPage();
+
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == ProductId);
+            if (product == null || product.Quantity < Quantity)
+                return RedirectToPage();
+
+            var customerEmail = HttpContext.Session.GetString("Email");
+            if (string.IsNullOrEmpty(customerEmail))
+                return RedirectToPage("/Login");
+
+            var cartItem = new CartItem
+            {
+                ProductId = ProductId,
+                VendorEmail = VendorEmail,
+                CustomerEmail = customerEmail,
+                Quantity = Quantity,
+                PricePerItem = product.Price * 1.10m // Apply markup
+            };
+
+            _context.CartItems.Add(cartItem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage();
+        }
+
 
     }
 }

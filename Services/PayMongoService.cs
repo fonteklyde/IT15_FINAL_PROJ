@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Core;
+using IT15_Final_Proj.Models;
 using Microsoft.Extensions.Configuration;
 using static System.Net.WebRequestMethods;
 
@@ -63,5 +64,50 @@ namespace IT15_Final_Proj.Services
             using var doc = JsonDocument.Parse(responseString);
             return doc.RootElement.GetProperty("data").GetProperty("attributes").GetProperty("checkout_url").GetString();
         }
+        public async Task<string> CreateCustomerCheckoutLinkAsync(
+    string fullName,
+    string email,
+    long amountInCentavos,
+    string description,
+    List<PayMongoLineItem> lineItems)
+        {
+            var payload = new
+            {
+                data = new
+                {
+                    attributes = new
+                    {
+                        billing = new { name = fullName, email = email },
+                        send_email_receipt = true,
+                        show_description = true,
+                        show_line_items = true,
+                        description = description,
+                        line_items = lineItems.Select(item => new
+                        {
+                            currency = "PHP",
+                            amount = item.Amount,
+                            name = item.Name,
+                            quantity = item.Quantity
+                        }).ToArray(),
+                        payment_method_types = new[] { "gcash", "card" },
+                        success_url = "https://localhost:7220/Customer/OrderSuccess",
+                        cancel_url = "https://localhost:7220/Customer/CustomerCart"
+                    }
+                }
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("https://api.paymongo.com/v1/checkout_sessions", content);
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception("Failed to create PayMongo checkout: " + responseString);
+
+            using var doc = JsonDocument.Parse(responseString);
+            return doc.RootElement.GetProperty("data").GetProperty("attributes").GetProperty("checkout_url").GetString();
+        }
+
     }
 }

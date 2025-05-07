@@ -1,0 +1,54 @@
+﻿@page
+@model Customer.CartModel
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<h2>My Cart</h2>
+
+@if (!Model.CartItems.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <form method="post">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.CartItems.Count; i++)
+                {
+                    var item = Model.CartItems[i];
+                    <tr>
+                        <td><img src="@item.Product.PictureUrl" alt="Product" width="80" /></td>
+                        <td>@item.Product.Name</td>
+                        <td>@item.PricePerItem.ToString("C")</td>
+                        <td>
+                            <input type="hidden" name="CartItems[@i].Id" value="@item.Id" />
+                            <input type="number" name="CartItems[@i].Quantity" value="@item.Quantity" min="1" class="form-control" />
+                        </td>
+                        <td>@(item.PricePerItem * item.Quantity)</td>
+                        <td>
+                            <button name="handler" value="Remove" type="submit" formaction="?handler=Remove&id=@item.Id" class="btn btn-danger btn-sm">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-between">
+            <button type="submit" formaction="?handler=UpdateCart" class="btn btn-primary">Update Cart</button>
+            <button type="submit" formaction="?handler=Checkout" class="btn btn-success">Proceed to Checkout</button>
+        </div>
+    </form>
+
+}
