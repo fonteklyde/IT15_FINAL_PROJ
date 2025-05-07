@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IT15_Final_Proj.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<<< HEAD:Migrations/20250507021734_RemovedTable.Designer.cs
     [Migration("20250507021734_RemovedTable")]
     partial class RemovedTable
+========
+    [Migration("20250507012206_RemoveShipmentStatusFromProductRequest")]
+    partial class RemoveShipmentStatusFromProductRequest
+>>>>>>>> f5eba88a301d00a23414c003e71117fdbaa4cd44:Migrations/20250507012206_RemoveShipmentStatusFromProductRequest.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

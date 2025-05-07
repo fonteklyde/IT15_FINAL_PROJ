@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IT15_Final_Proj.Migrations
 {
     [DbContext(typeof(AppDbContext))]
+<<<<<<<< HEAD:Migrations/20250507131259_RemoveCartItem.Designer.cs
     [Migration("20250507131259_RemoveCartItem")]
     partial class RemoveCartItem
+========
+    [Migration("20250507010820_AddShipmentStatusToProductRequest")]
+    partial class AddShipmentStatusToProductRequest
+>>>>>>>> f5eba88a301d00a23414c003e71117fdbaa4cd44:Migrations/20250507010820_AddShipmentStatusToProductRequest.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +92,12 @@ namespace IT15_Final_Proj.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+<<<<<<<< HEAD:Migrations/20250507131259_RemoveCartItem.Designer.cs
+========
+                    b.Property<DateTime?>("DeliveredAt")
+                        .HasColumnType("datetime2");
+
+>>>>>>>> f5eba88a301d00a23414c003e71117fdbaa4cd44:Migrations/20250507010820_AddShipmentStatusToProductRequest.Designer.cs
                     b.Property<DateTime?>("PaidAt")
                         .HasColumnType("datetime2");
 
@@ -99,6 +110,16 @@ namespace IT15_Final_Proj.Migrations
                     b.Property<DateTime>("RequestedAt")
                         .HasColumnType("datetime2");
 
+<<<<<<<< HEAD:Migrations/20250507131259_RemoveCartItem.Designer.cs
+========
+                    b.Property<string>("ShipmentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ShippedAt")
+                        .HasColumnType("datetime2");
+
+>>>>>>>> f5eba88a301d00a23414c003e71117fdbaa4cd44:Migrations/20250507010820_AddShipmentStatusToProductRequest.Designer.cs
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
