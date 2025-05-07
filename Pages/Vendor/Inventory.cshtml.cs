@@ -24,7 +24,7 @@ namespace IT15_Final_Proj.Pages.Vendor
             if (string.IsNullOrEmpty(vendorEmail))
                 return RedirectToPage("/Login");
 
-            const decimal markupPercentage = 0.20m;
+            const decimal markupPercentage = 0.10m;
 
             PurchasedProducts = await _context.ProductRequests
                 .Where(r => r.VendorEmail == vendorEmail && r.Status == "PAID")

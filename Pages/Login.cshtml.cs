@@ -99,11 +99,11 @@ public class LoginModel : PageModel
             case "Admin":
                 return RedirectToPage("/Admin/Dashboard");
             case "Customer":
-                return RedirectToPage("/Customer/Dashboard");
+                return RedirectToPage("/Customer/Shop");
             case "Vendor":
-                return RedirectToPage("/Vendor/Dashboard");
+                return RedirectToPage("/Vendor/Inventory");
             case "Supplier":
-                return RedirectToPage("/Supplier/Dashboard");
+                return RedirectToPage("/Supplier/Products");
             case "Driver":
                 return RedirectToPage("/Driver/Dashboard");
             default:

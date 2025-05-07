@@ -14,5 +14,11 @@ namespace IT15_Final_Proj.Services
         public DbSet<LoginLog> LoginLogs { get; set; }
         public DbSet<ProductRequest> ProductRequests { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            // Ensure there are no null objects accessed here
+        }
+
     }
 }

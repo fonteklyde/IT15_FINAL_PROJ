@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IT15_Final_Proj.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250506140819_ProductRequest")]
-    partial class ProductRequest
+    [Migration("20250507012206_RemoveShipmentStatusFromProductRequest")]
+    partial class RemoveShipmentStatusFromProductRequest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,7 +87,13 @@ namespace IT15_Final_Proj.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("PaidAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("RequestedAt")
