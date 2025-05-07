@@ -24,8 +24,6 @@ namespace IT15_Final_Proj.Pages.Vendor
             if (string.IsNullOrEmpty(vendorEmail))
                 return RedirectToPage("/Login");
 
-            const decimal markupPercentage = 0.20m;
-
             PurchasedProducts = await _context.ProductRequests
                 .Where(r => r.VendorEmail == vendorEmail && r.Status == "PAID")
                 .Include(r => r.Product)
@@ -35,8 +33,7 @@ namespace IT15_Final_Proj.Pages.Vendor
                     Name = g.First().Product.Name,
                     Price = g.First().Product.Price,
                     QuantityPurchased = g.Sum(x => x.Quantity),
-                    PictureUrl = g.First().Product.PictureUrl,
-                    MarkupPrice = g.First().Product.Price * (1 + markupPercentage)
+                    PictureUrl = g.First().Product.PictureUrl
                 })
                 .ToListAsync();
 

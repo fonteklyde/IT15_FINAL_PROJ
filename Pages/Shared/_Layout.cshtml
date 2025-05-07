@@ -60,23 +60,21 @@
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Vendor/Transactions">Transactions</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Vendor/Dashboard">Supplier Connect</a>
-                            </li>
                         }
                         @if (role == "Customer")
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                                <a class="nav-link text-light" asp-page="/Customer/CustomerProducts">Browse Products</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Customer/ViewCart">View Cart</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Admin/Dashboard">Orders</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Admin/Dashboard">Track Shipment</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Support</a>
                             </li>
                         }
                         @if (role == "Supplier")
@@ -89,9 +87,6 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Supplier/Requests">Vendor Requests</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Supplier/Dashboard">Report</a>
                             </li>
                         }
                         @if (role == "Driver")

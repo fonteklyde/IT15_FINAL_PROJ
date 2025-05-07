@@ -14,7 +14,7 @@
                 <th class="p-2 border">Product</th>
                 <th class="p-2 border">Supplier</th>
                 <th class="p-2 border">Quantity</th>
-                <th class="p-2 border">Requested At</th>
+                <th class="p-2 border">Paid At</th>
                 <th class="p-2 border">Status</th>
             </tr>
         </thead>
@@ -25,7 +25,7 @@
                     <td class="p-2 border">@request.Product?.Name</td>
                     <td class="p-2 border">@request.SupplierEmail</td>
                     <td class="p-2 border">@request.Quantity</td>
-                    <td class="p-2 border">@request.RequestedAt.ToString("g")</td>
+                    <td>@request.PaidAt?.ToString("g")</td>
                     <td class="p-2 border text-green-600 font-bold">@request.Status</td>
                 </tr>
             }

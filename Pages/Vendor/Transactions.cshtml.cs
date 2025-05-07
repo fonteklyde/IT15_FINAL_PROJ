@@ -26,11 +26,23 @@ namespace IT15_Final_Proj.Pages.Vendor
             if (requestId.HasValue)
             {
                 var request = await _context.ProductRequests
+                    .Include(r => r.Product)
                     .FirstOrDefaultAsync(r => r.Id == requestId.Value && r.VendorEmail == vendorEmail);
 
                 if (request != null && request.Status == "APPROVED")
                 {
                     request.Status = "PAID";
+                    request.PaidAt = DateTime.Now;
+
+                    if (request.Product != null)
+                    {
+                        request.Product.Quantity -= request.Quantity;
+
+                        // Optional safeguard: Don't go below 0
+                        if (request.Product.Quantity < 0)
+                            request.Product.Quantity = 0;
+                    }
+
                     await _context.SaveChangesAsync();
                 }
             }

@@ -10,7 +10,7 @@
         public int Quantity { get; set; }
         public DateTime RequestedAt { get; set; }
         public string Status { get; set; } = "PENDING";
-
+        public DateTime? PaidAt { get; set; }
         public Product Product { get; set; }
     }
 }
