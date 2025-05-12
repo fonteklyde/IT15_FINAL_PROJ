@@ -13,14 +13,17 @@ namespace IT15_Final_Proj.Models
         public string Name { get; set; }
 
         [NotMapped]
+        [Required(ErrorMessage = "Please select an image")]
         public IFormFile ProductImage { get; set; }
 
         public string PictureUrl { get; set; }
 
         [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
         public decimal Price { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
         public int Quantity { get; set; }
 
         public int UserId { get; set; }

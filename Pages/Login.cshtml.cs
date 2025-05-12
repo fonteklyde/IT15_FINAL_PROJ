@@ -85,6 +85,14 @@ public class LoginModel : PageModel
 
         LoginAttemptTracker.ResetAttempts(Input.Email);
 
+        user.LastLoginDate = DateTime.Now;
+        user.IsActive = true;
+
+        if (user.LastLoginDate < DateTime.Now.AddDays(-30))
+        {
+            user.IsActive = false;
+        }
+
         _context.LoginLogs.Add(new LoginLog
         {
             Email = user.Email,
@@ -97,15 +105,13 @@ public class LoginModel : PageModel
         switch (user.Role)
         {
             case "Admin":
-                return RedirectToPage("/Admin/Dashboard");
+                return RedirectToPage("/Admin/Inventory");
             case "Customer":
                 return RedirectToPage("/Customer/CustomerProducts");
             case "Vendor":
                 return RedirectToPage("/Vendor/Inventory");
             case "Supplier":
                 return RedirectToPage("/Supplier/Products");
-            case "Driver":
-                return RedirectToPage("/Driver/Dashboard");
             default:
                 return RedirectToPage("/Index"); // Fallback in case no role matches
         }

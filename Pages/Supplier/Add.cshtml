@@ -22,13 +22,13 @@
 
     <div class="form-group">
         <label asp-for="Product.Price"></label>
-        <input asp-for="Product.Price" class="form-control" type="number" step="0.01" />
+        <input asp-for="Product.Price" class="form-control" type="number" step="0.01" min="1" />
         <span asp-validation-for="Product.Price" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="Product.Quantity"></label>
-        <input asp-for="Product.Quantity" class="form-control" type="number" />
+        <input asp-for="Product.Quantity" class="form-control" type="number" min="1" />
         <span asp-validation-for="Product.Quantity" class="text-danger"></span>
     </div>
     <br />

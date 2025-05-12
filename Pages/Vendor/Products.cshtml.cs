@@ -30,27 +30,38 @@ namespace IT15_Final_Proj.Pages.Vendor
         public async Task<IActionResult> OnGetAsync()
         {
             var email = HttpContext.Session.GetString("Email");
-            
+            var vendorIdStr = HttpContext.Session.GetString("UserId");
 
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(vendorIdStr))
                 return RedirectToPage("/Login");
 
-            // Get vendor's requests (if Requests is not already being fetched)
+            int vendorId = int.Parse(vendorIdStr);
+
+            var allSupplierProducts = await (from product in _context.Products
+                                             join supplier in _context.Users on product.UserId equals supplier.Id
+                                             where supplier.Role == "SUPPLIER"
+                                             select new ProductViewModel
+                                             {
+                                                 Id = product.Id,
+                                                 Name = product.Name,
+                                                 Price = product.Price,
+                                                 Quantity = product.Quantity,
+                                                 PictureUrl = product.PictureUrl,
+                                                 SupplierEmail = supplier.Email
+                                             }).ToListAsync();
+
+            var paidProductIds = await _context.ProductRequests
+            .Where(r => r.Status == "PAID" && r.VendorEmail != email)
+            .Select(r => r.ProductId)
+            .ToListAsync();
+
+            Products = allSupplierProducts
+            .Where(p => !paidProductIds.Contains(p.Id))
+            .ToList();
+
             VendorRequests = await _context.ProductRequests
                 .Where(r => r.VendorEmail == email && r.Status != "PAID")
                 .ToListAsync();
-
-            Products = await (from product in _context.Products
-                              join user in _context.Users on product.UserId equals user.Id
-                              select new ProductViewModel
-                              {
-                                  Id = product.Id,
-                                  Name = product.Name,
-                                  Price = product.Price,
-                                  Quantity = product.Quantity,
-                                  PictureUrl = product.PictureUrl,
-                                  SupplierEmail = user.Email
-                              }).ToListAsync();
 
             return Page();
         }
@@ -92,14 +103,24 @@ namespace IT15_Final_Proj.Pages.Vendor
         public async Task<IActionResult> OnPostPaymentAsync(int requestId)
         {
             var request = await _context.ProductRequests.FirstOrDefaultAsync(r => r.Id == requestId);
-            if (request == null || request.Status != "Approved")
+            if (request == null || request.Status != "APPROVED")
             {
                 TempData["ErrorMessage"] = "Invalid or unapproved request.";
                 return RedirectToPage();
             }
+            bool alreadyPaid = await _context.ProductRequests
+                .AnyAsync(r => r.ProductId == request.ProductId && r.Status == "PAID");
 
-            // Redirect to a payment page or initiate payment logic
-            // For now, just simulate the redirection
+            if (alreadyPaid)
+            {
+                TempData["ErrorMessage"] = "This product is already assigned to another vendor.";
+                return RedirectToPage();
+            }
+
+            request.Status = "PAID";
+            request.PaidAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+
             TempData["SuccessMessage"] = $"Redirecting to payment for Product ID: {request.ProductId}";
             return RedirectToPage("/Vendor/Payment", new { requestId = requestId });
         }

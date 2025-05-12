@@ -1,0 +1,89 @@
+﻿@page "{orderId:int}"
+@model IT15_Final_Proj.Pages.Customer.TrackOrdersModel
+@{
+    ViewData["Title"] = "Track Order";
+}
+
+@section Head {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" crossorigin="" />
+}
+
+<h2>Track Order #@Model.Order.Id</h2>
+
+<div id="map" style="height: 500px;" class="mb-4"></div>
+
+<p><strong>Estimated Delivery Time:</strong> <span id="estimatedTime">Calculating...</span></p>
+
+<form id="tokenForm" method="post">
+    @Html.AntiForgeryToken()
+</form>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" crossorigin=""></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const deliveryLat = @Model.Order.DeliveryLatitude;
+            const deliveryLon = @Model.Order.DeliveryLongitude;
+            const vendorLat = 7.065832635396533;
+            const vendorLon = 125.59678107178759;
+            const orderId = @Model.Order.Id;
+
+            const map = L.map('map').setView([deliveryLat, deliveryLon], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([vendorLat, vendorLon]).addTo(map).bindPopup("LogiHub").openPopup();
+            L.marker([deliveryLat, deliveryLon]).addTo(map).bindPopup("Delivery Location");
+
+            const carIcon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/744/744465.png',
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+            });
+
+            const movingMarker = L.marker([vendorLat, vendorLon], { icon: carIcon }).addTo(map);
+
+            // Draw route using GraphHopper
+            const apiKey = '@Model.ApiKey';
+            const url = `https://graphhopper.com/api/1/route?point=${vendorLat},${vendorLon}&point=${deliveryLat},${deliveryLon}&vehicle=car&locale=en&key=${apiKey}&points_encoded=false`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                const coords = data.paths[0].points.coordinates.map(c => [c[1], c[0]]);
+                const routeLine = L.polyline(coords, { color: 'blue' }).addTo(map);
+                map.fitBounds(routeLine.getBounds());
+
+                const estimatedTime = data.paths[0].time / 60000; // ms to minutes
+                document.getElementById("estimatedTime").textContent = `${estimatedTime.toFixed(2)} minutes`;
+            } catch (err) {
+                console.error("Error fetching route:", err);
+                document.getElementById("estimatedTime").textContent = "Unavailable";
+            }
+
+            // Poll server every 3 seconds for updated location
+            async function fetchLocation() {
+                try {
+                    const res = await fetch(`/Customer/TrackOrders/${orderId}?handler=Location`);
+                    const data = await res.json();
+
+                    if (data.lat && data.lon) {
+                        movingMarker.setLatLng([data.lat, data.lon]);
+                    }
+
+                    if (data.status === "DELIVERED") {
+                        movingMarker.bindPopup("DELIVERED").openPopup();
+                        clearInterval(polling);
+                    }
+                } catch (e) {
+                    console.error("Polling error:", e);
+                }
+            }
+
+
+            const polling = setInterval(fetchLocation, 3000); // every 3s
+        });
+    </script>
+}

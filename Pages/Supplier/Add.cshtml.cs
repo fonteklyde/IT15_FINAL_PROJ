@@ -21,42 +21,55 @@ namespace IT15_Final_Proj.Pages.Supplier
         [BindProperty]
         public Product Product { get; set; }
 
-        public void OnGet() { }
+        public async Task<IActionResult> OnGetAsync()
+        {
+            var email = HttpContext.Session.GetString("Email");
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToPage("/Login");
+            }
+
+            return Page(); // Stay on the same Razor Page
+        }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine(error.ErrorMessage);
-            }
-
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
                 return RedirectToPage("/Login");
 
             Product.UserId = int.Parse(userIdClaim.Value);
 
-            if (Product.ProductImage != null)
+            try
             {
-                var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                    Directory.CreateDirectory(uploadsFolder);
-
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Product.ProductImage.FileName);
-                var filePath = Path.Combine(uploadsFolder, fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (Product.ProductImage != null)
                 {
-                    await Product.ProductImage.CopyToAsync(stream);
+                    var uploadsFolder = Path.Combine(_environment.WebRootPath, "uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(Product.ProductImage.FileName);
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await Product.ProductImage.CopyToAsync(stream);
+                    }
+
+                    Product.PictureUrl = "/uploads/" + fileName;
                 }
 
-                Product.PictureUrl = "/uploads/" + fileName;
+                _context.Products.Add(Product);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("/Supplier/Products");
             }
-
-            _context.Products.Add(Product);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("/Supplier/Products");
+            catch (Exception ex)
+            {
+                // Log error and show a generic message
+                ModelState.AddModelError(string.Empty, "An error occurred while adding the product. Please try again.");
+                Console.WriteLine(ex.Message);
+                return Page();
+            }
         }
     }
 }

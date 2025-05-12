@@ -3,17 +3,17 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-
-
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LogiHub</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/IT15_Final_Proj.styles.css" asp-append-version="true" />
+
+    @RenderSection("Head", required: false)
 </head>
 
+@using IT15_Final_Proj.Models
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
@@ -40,13 +40,13 @@
                         {
 
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
+                                <a class="nav-link text-light" asp-page="/Admin/Inventory">Inventory</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/ManageUsers">Manage Users</a>
+                                <a class="nav-link text-light" asp-page="/Admin/ManageUsers">Users</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Settings</a>
+                                <a class="nav-link text-light" asp-page="/Admin/ManageOrders">Orders</a>
                             </li>
                         }
                         @if (role == "Vendor")
@@ -58,7 +58,10 @@
                                 <a class="nav-link text-light" asp-page="/Vendor/Products">Request Products</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Vendor/Transactions">Transactions</a>
+                                <a class="nav-link text-light" asp-page="/Vendor/Transactions">Supplier Transactions</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-page="/Vendor/CustomerTransactions">Customer Transactions</a>
                             </li>
                         }
                         @if (role == "Customer")
@@ -66,15 +69,11 @@
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Customer/CustomerProducts">Browse Products</a>
                             </li>
-
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Customer/CustomerCart">View Cart</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Customer/Orders">Orders</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Track Shipment</a>
                             </li>
                         }
                         @if (role == "Supplier")
@@ -87,21 +86,6 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-page="/Supplier/Requests">Vendor Requests</a>
-                            </li>
-                        }
-                        @if (role == "Driver")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Inventory Supply</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Vendor Requests</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-page="/Admin/Dashboard">Report</a>
                             </li>
                         }
                     </ul>

@@ -37,5 +37,7 @@ namespace IT15_Final_Proj.Models
 
         [Required]
         public string Role { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

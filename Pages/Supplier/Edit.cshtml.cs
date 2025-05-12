@@ -34,11 +34,7 @@ public class EditModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if (!ModelState.IsValid)
-        {
-            return Page();
-        }
-
+        
         var existingProduct = await _context.Products.FindAsync(Product.Id);
         if (existingProduct == null)
         {

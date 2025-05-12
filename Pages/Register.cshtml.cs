@@ -33,7 +33,6 @@ public class RegisterModel : PageModel
             return Page();
         }
 
-
         var hasher = new PasswordHasher<User>();
         NewUser.Password = hasher.HashPassword(NewUser, NewUser.Password);
         _context.Users.Add(NewUser);
