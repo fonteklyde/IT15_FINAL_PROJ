@@ -28,36 +28,20 @@ namespace IT15_Final_Proj.Pages.Admin
 
         public void OnGet()
         {
-            Users = _context.Users.ToList();
-        }
-        public async Task<IActionResult> OnPostEditAsync()
-        {
-            var user = _context.Users.Find(EditUser.Id);
-            if (user != null)
-            {
-                user.FirstName = EditUser.FirstName;
-                user.MiddleName = EditUser.MiddleName;
-                user.LastName = EditUser.LastName;
-                user.Address = EditUser.Address;
-                user.Email = EditUser.Email;
-                user.Role = EditUser.Role;
-                await _context.SaveChangesAsync();
+            var threshold = DateTime.Now.AddDays(-30);
+            var inactiveUsers = _context.Users
+                .Where(u => u.LastLoginDate < threshold && u.IsActive && u.Role != "Admin")
+                .ToList();
 
-                TempData["SuccessMessage"] = "User successfully edited.";
-            }
-
-            return RedirectToPage();
-        }
-        public async Task<IActionResult> OnPostDeleteAsync(int id)
-        {
-            var user = await _context.Users.FindAsync(DeleteUserId);
-            if (user != null)
+            foreach (var user in inactiveUsers)
             {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "User successfully deleted.";
+                user.IsActive = false;
             }
-            return RedirectToPage();
+            _context.SaveChanges();
+
+            Users = _context.Users
+                .Where(u => u.Role != "Admin")
+                .ToList();
         }
     }
 }

@@ -17,6 +17,7 @@ public class RegisterModel : PageModel
 
     public void OnGet()
     {
+        throw new Exception("Test error for logging.");
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -32,7 +33,6 @@ public class RegisterModel : PageModel
             ModelState.AddModelError("NewUser.Email", "Email is already in use.");
             return Page();
         }
-
 
         var hasher = new PasswordHasher<User>();
         NewUser.Password = hasher.HashPassword(NewUser, NewUser.Password);

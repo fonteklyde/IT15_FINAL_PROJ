@@ -63,13 +63,12 @@ public class LoginModel : PageModel
             return Page();
         }
 
-        // Create claims for the user
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, $"{user.FirstName} {user.MiddleName} {user.LastName}"), // Combine names into one claim
+            new Claim(ClaimTypes.Name, $"{user.FirstName} {user.MiddleName} {user.LastName}"), 
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Role, user.Role),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) // Use NameIdentifier for the user's unique ID
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
 
         var identity = new ClaimsIdentity(claims, "Cookies");
@@ -85,6 +84,14 @@ public class LoginModel : PageModel
 
         LoginAttemptTracker.ResetAttempts(Input.Email);
 
+        user.LastLoginDate = DateTime.Now;
+        user.IsActive = true;
+
+        if (user.LastLoginDate < DateTime.Now.AddDays(-30))
+        {
+            user.IsActive = false;
+        }
+
         _context.LoginLogs.Add(new LoginLog
         {
             Email = user.Email,
@@ -97,15 +104,13 @@ public class LoginModel : PageModel
         switch (user.Role)
         {
             case "Admin":
-                return RedirectToPage("/Admin/Dashboard");
+                return RedirectToPage("/Admin/Inventory");
             case "Customer":
                 return RedirectToPage("/Customer/CustomerProducts");
             case "Vendor":
                 return RedirectToPage("/Vendor/Inventory");
             case "Supplier":
                 return RedirectToPage("/Supplier/Products");
-            case "Driver":
-                return RedirectToPage("/Driver/Dashboard");
             default:
                 return RedirectToPage("/Index"); // Fallback in case no role matches
         }

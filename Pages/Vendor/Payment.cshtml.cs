@@ -22,6 +22,9 @@ namespace IT15_Final_Proj.Pages.Vendor
 
         public async Task<IActionResult> OnGetAsync(int requestId)
         {
+            var email = HttpContext.Session.GetString("Email");
+            if (email == null) return RedirectToPage("/Login");
+
             RequestData = await _context.ProductRequests
                 .Include(r => r.Product) // assuming navigation property
                 .FirstOrDefaultAsync(r => r.Id == requestId);
@@ -32,7 +35,9 @@ namespace IT15_Final_Proj.Pages.Vendor
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == RequestData.ProductId);
             if (product == null) return RedirectToPage("/Vendor/Products");
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == product.UserId);
+            int vendorId = int.Parse(RequestData.VendorId);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == vendorId);
 
             string fullName = user.FirstName + " " + user.LastName; // Assuming these fields exist
             long amountInCentavos = (long)(product.Price * 100);

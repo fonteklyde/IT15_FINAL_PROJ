@@ -65,12 +65,19 @@ namespace IT15_Final_Proj.Services
             return doc.RootElement.GetProperty("data").GetProperty("attributes").GetProperty("checkout_url").GetString();
         }
         public async Task<string> CreateCustomerCheckoutLinkAsync(
-    string fullName,
-    string email,
-    long amountInCentavos,
-    string description,
-    List<PayMongoLineItem> lineItems)
+            string fullName,
+            string email,
+            long amountInCentavos,
+            string description,
+            List<PayMongoLineItem> lineItems,
+            Dictionary<string, string> metadata
+        )
         {
+            // Build success_url with metadata query params
+            var vendorEmail = Uri.EscapeDataString(metadata["vendor_email"]);
+            var customerEmail = Uri.EscapeDataString(metadata["customer_email"]);
+            var successUrl = $"https://localhost:7220/Customer/OrderSuccess?vendorEmail={vendorEmail}&customerEmail={customerEmail}";
+
             var payload = new
             {
                 data = new
@@ -82,6 +89,7 @@ namespace IT15_Final_Proj.Services
                         show_description = true,
                         show_line_items = true,
                         description = description,
+                        metadata = metadata,
                         line_items = lineItems.Select(item => new
                         {
                             currency = "PHP",
@@ -90,7 +98,7 @@ namespace IT15_Final_Proj.Services
                             quantity = item.Quantity
                         }).ToArray(),
                         payment_method_types = new[] { "gcash", "card" },
-                        success_url = "https://localhost:7220/Customer/OrderSuccess",
+                        success_url = successUrl,
                         cancel_url = "https://localhost:7220/Customer/CustomerCart"
                     }
                 }

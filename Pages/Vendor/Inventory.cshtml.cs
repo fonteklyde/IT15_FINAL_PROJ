@@ -35,6 +35,7 @@ namespace IT15_Final_Proj.Pages.Vendor
                     QuantityPurchased = g.Sum(x => x.Quantity),
                     PictureUrl = g.First().Product.PictureUrl
                 })
+                .Where(p => p.QuantityPurchased > 0)
                 .ToListAsync();
 
             return Page();

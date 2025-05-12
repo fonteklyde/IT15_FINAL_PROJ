@@ -8,6 +8,7 @@ namespace IT15_Final_Proj.Models
         public int Id { get; set; }
 
         [Required]
+        [RegularExpression(@"^[^<>]*$", ErrorMessage = "HTML tags are not allowed.")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
@@ -37,5 +38,7 @@ namespace IT15_Final_Proj.Models
 
         [Required]
         public string Role { get; set; }
+        public DateTime LastLoginDate { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

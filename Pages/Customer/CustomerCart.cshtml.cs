@@ -17,26 +17,43 @@ namespace IT15_Final_Proj.Pages.Customer
             _context = context;
             _payMongoService = payMongoService;
         }
+        private const decimal ShippingFee = 50m;
 
         [BindProperty]
-        public List<CartItem> CartItems { get; set; }
+        public List<CartItem> AllCartItems { get; set; }
+
+        [BindProperty]
+        public string SelectedVendor { get; set; }
+
+        [BindProperty]
+        public List<CartItem> VendorCartItems { get; set; } = new();
+
+        public Dictionary<string, List<CartItem>> CartItemsByVendor { get; set; } = new();
+
+        public decimal Subtotal => CartItemsByVendor.SelectMany(g => g.Value).Sum(i => i.PricePerItem * i.Quantity);
+        public decimal TotalWithShipping => Subtotal + ShippingFee;
 
         public async Task<IActionResult> OnGetAsync()
         {
             var email = HttpContext.Session.GetString("Email");
             if (email == null) return RedirectToPage("/Login");
 
-            CartItems = await _context.CartItems
+            AllCartItems = await _context.CartItems
                 .Include(c => c.Product)
                 .Where(c => c.CustomerEmail == email)
                 .ToListAsync();
+
+            CartItemsByVendor = AllCartItems
+                .GroupBy(c => c.VendorEmail)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
             return Page();
         }
 
         public async Task<IActionResult> OnPostUpdateCartAsync()
         {
-            foreach (var item in CartItems)
+
+            foreach (var item in VendorCartItems)
             {
                 var cartItem = await _context.CartItems.FindAsync(item.Id);
                 if (cartItem != null)
@@ -59,42 +76,58 @@ namespace IT15_Final_Proj.Pages.Customer
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostCheckoutAsync()
+        public async Task<IActionResult> OnPostCheckoutVendorAsync()
         {
+            
             var email = HttpContext.Session.GetString("Email");
-            if (email == null) return RedirectToPage("/Login");
+            if (email == null || string.IsNullOrEmpty(SelectedVendor))
+                return RedirectToPage("/Login");
+
+            var metadata = new Dictionary<string, string>
+            {
+                { "customer_email", email },
+                { "vendor_email", SelectedVendor }
+            };
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null) return RedirectToPage("/Login");
 
-            string fullName = $"{user.FirstName} {user.LastName}";
-
-            var cartItems = await _context.CartItems
+            var vendorItems = await _context.CartItems
                 .Include(c => c.Product)
-                .Where(c => c.CustomerEmail == email)
+                .Where(c => c.CustomerEmail == email && c.VendorEmail == SelectedVendor)
                 .ToListAsync();
 
-            if (!cartItems.Any()) return RedirectToPage();
+            if (!vendorItems.Any()) return RedirectToPage();
 
-            // Build line items for PayMongo
-            var lineItems = cartItems.Select(item => new PayMongoLineItem
+            var lineItems = vendorItems.Select(item => new PayMongoLineItem
             {
                 Name = item.Product.Name,
-                Amount = (long)(item.PricePerItem * 100), // in centavos per item
+                Amount = (long)(item.PricePerItem * 100), 
                 Quantity = item.Quantity
             }).ToList();
 
-            string description = string.Join(", ", cartItems.Select(i => i.Product.Name));
+            lineItems.Add(new PayMongoLineItem
+            {
+                Name = "Shipping Fee",
+                Amount = (long)(ShippingFee * 100), 
+                Quantity = 1
+            });
 
-            // Total = sum of (price per item × quantity) in centavos
-            long totalAmount = cartItems.Sum(i => (long)(i.PricePerItem * i.Quantity * 100));
+            string fullName = $"{user.FirstName} {user.LastName}";
+            string description = string.Join(", ", vendorItems.Select(i => i.Product.Name)) + " + Shipping Fee";
+            long totalAmount = vendorItems.Sum(i => (long)(i.PricePerItem * i.Quantity * 100)) + (long)(ShippingFee * 100);
 
             string checkoutUrl = await _payMongoService.CreateCustomerCheckoutLinkAsync(
                 fullName,
                 email,
                 totalAmount,
                 description,
-                lineItems
+                lineItems,
+                new Dictionary<string, string>
+                {
+                    { "vendor_email", SelectedVendor },
+                    { "customer_email", email }
+                }
             );
 
             return Redirect(checkoutUrl);
