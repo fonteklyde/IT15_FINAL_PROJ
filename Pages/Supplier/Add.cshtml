@@ -10,7 +10,7 @@
 <form method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label asp-for="Product.Name"></label>
-        <input asp-for="Product.Name" class="form-control" />
+        <input asp-for="Product.Name" class="form-control" maxlength="50"/>
         <span asp-validation-for="Product.Name" class="text-danger"></span>
     </div>
 

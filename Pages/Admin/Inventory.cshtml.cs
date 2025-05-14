@@ -24,7 +24,7 @@ namespace IT15_Final_Proj.Pages.Admin
             var userRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
 
             if (userRole != "Admin")
-            {
+        {
                 ErrorMessage = "Access denied. You do not have permission to view this page.";
                 return Page(); // Don't redirect, just show error
             }

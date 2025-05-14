@@ -16,9 +16,7 @@ public class RegisterModel : PageModel
     public User NewUser { get; set; }
 
     public void OnGet()
-    {
-        throw new Exception("Test error for logging.");
-    }
+    {}
 
     public async Task<IActionResult> OnPostAsync()
     {

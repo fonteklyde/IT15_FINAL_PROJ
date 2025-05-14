@@ -17,13 +17,14 @@
 }
 else
 {
-    <table class="table-auto w-full border border-collapse border-gray-300 mb-6">
+    <table class="table-auto w-full border border-collapse border-gray-300 mb-6 " style="height:100%; width:100%;">
         <thead class="bg-green-700 text-black">
             <tr>
+
+                <th class="p-2 border">Image</th>
                 <th class="p-2 border">Name</th>
                 <th class="p-2 border">Price</th>
                 <th class="p-2 border">Quantity</th>
-                <th class="p-2 border">Image</th>
                 <th class="p-2 border">Supplier Email</th>
                 <th class="p-2 border">Actions</th>
             </tr>
@@ -32,12 +33,13 @@ else
             @foreach (var product in Model.Products)
             {
                 <tr class="text-center">
-                    <td class="p-2 border">@product.Name</td>
-                    <td class="p-2 border">₱@product.Price</td>
-                    <td class="p-2 border">@product.Quantity</td>
+
                     <td class="p-2 border">
                         <img src="@product.PictureUrl" alt="@product.Name" style="width: 150px; height: 150px;" />
                     </td>
+                    <td class="p-2 border">@product.Name</td>
+                    <td class="p-2 border">₱@product.Price</td>
+                    <td class="p-2 border">@product.Quantity</td>
                     <td class="p-2 border">@product.SupplierEmail</td>
                     <td class="p-2 border">
                         <button type="button"
@@ -57,7 +59,7 @@ else
 @if (Model.VendorRequests != null && Model.VendorRequests.Any())
 {
     <h2 class="text-2xl font-bold mb-4">Your Product Requests</h2>
-    <table class="table-auto w-full border border-collapse border-gray-300">
+    <table class="table-auto w-full border border-collapse border-gray-300" style="height:100%; width:100%;">
         <thead class="bg-blue-700 text-black">
             <tr class="text-center">
                 <th class="p-2 border">Product Name</th>
@@ -83,7 +85,7 @@ else
                         {
                             <form method="get" asp-page="/Vendor/Payment">
                                 <input type="hidden" name="requestId" value="@request.Id" />
-                                <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded ml-2">
+                                <button type="submit" class="bg-green-500 text-white px-4 py-1 rounded ml-2" style="background-color:#398007;">
                                     Payment
                                 </button>
                             </form>

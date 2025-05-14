@@ -19,7 +19,7 @@
 }
 else
 {
-    <table class="table-auto w-full border border-collapse border-gray-300">
+    <table class="table-auto w-full border border-collapse border-gray-300" style="width:100%; height:100%;">
         <thead class="bg-green-700 text-black">
             <tr>
                 <th class="p-2 border">Product Name</th>
@@ -47,7 +47,7 @@ else
                             </form>
                             <form method="post" asp-page-handler="Deny" style="display:inline;">
                                 <input type="hidden" name="requestId" value="@req.Id" />
-                                <button type="submit" class="bg-red-600 text-white px-3 py-1 rounded" style="background-color:#398007; color:white">Deny</button>
+                                <button type="submit" class="bg-red-600 text-black px-3 py-1 rounded">Deny</button>
                             </form>
                         }
                         else
