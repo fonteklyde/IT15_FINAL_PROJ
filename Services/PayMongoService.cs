@@ -46,8 +46,8 @@ namespace IT15_Final_Proj.Services
                             }
                         },
                         payment_method_types = new[] { "gcash", "card" },
-                        success_url = $"https://localhost:7220/Vendor/Transactions?requestId={requestId}",
-                        cancel_url = "https://localhost:7220/Vendor/Products"
+                        success_url = $"https://logihub.runasp.net/Vendor/Transactions?requestId={requestId}",
+                        cancel_url = $"https://logihub.runasp.net/Vendor/Products"
                     }
                 }
             };
@@ -76,7 +76,7 @@ namespace IT15_Final_Proj.Services
             // Build success_url with metadata query params
             var vendorEmail = Uri.EscapeDataString(metadata["vendor_email"]);
             var customerEmail = Uri.EscapeDataString(metadata["customer_email"]);
-            var successUrl = $"https://localhost:7220/Customer/OrderSuccess?vendorEmail={vendorEmail}&customerEmail={customerEmail}";
+            var successUrl = $"https://logihub.runasp.net/Customer/OrderSuccess?vendorEmail={vendorEmail}&customerEmail={customerEmail}";
 
             var payload = new
             {
@@ -99,7 +99,7 @@ namespace IT15_Final_Proj.Services
                         }).ToArray(),
                         payment_method_types = new[] { "gcash", "card" },
                         success_url = successUrl,
-                        cancel_url = "https://localhost:7220/Customer/CustomerCart"
+                        cancel_url = $"https://logihub.runasp.net/Customer/CustomerCart"
                     }
                 }
             };

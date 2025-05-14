@@ -1,7 +1,7 @@
 ﻿@page
 @model IT15_Final_Proj.Pages.Admin.InventoryModel
 @{
-    ViewData["Title"] = "Inventory";
+	ViewData["Title"] = "Inventory";
 }
 
 <h2>Inventory</h2>
@@ -12,25 +12,25 @@
 }
 else
 {
-    @if (!Model.GroupedInventory.Any())
-    {
-        <p>No inventory items currently at the sorting facility.</p>
-    }
-    else
-    {
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            @foreach (var item in Model.GroupedInventory)
-            {
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="@item.PictureUrl" class="card-img-top" alt="@item.ProductName" style="object-fit: cover; height: 200px;">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.ProductName</h5>
-                            <p class="card-text">Quantity: @item.TotalQuantity</p>
-                        </div>
+@if (!Model.GroupedInventory.Any())
+{
+    <p>No inventory items currently at the sorting facility.</p>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model.GroupedInventory)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="@item.PictureUrl" class="card-img-top" alt="@item.ProductName" style="object-fit: cover; height: 200px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.ProductName</h5>
+                        <p class="card-text">Quantity: @item.TotalQuantity</p>
                     </div>
                 </div>
-            }
-        </div>
-    }
+            </div>
+        }
+    </div>
+}
 }
