@@ -9,6 +9,7 @@ namespace IT15_Final_Proj.Pages.Vendor
 {
     public class InventoryModel : PageModel
     {
+        //asdasd
         private readonly AppDbContext _context;
 
         public InventoryModel(AppDbContext context)

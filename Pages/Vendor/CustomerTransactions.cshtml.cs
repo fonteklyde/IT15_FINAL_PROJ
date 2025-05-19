@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IT15_Final_Proj.Pages.Vendor
 {
+    //asdasd
     public class CustomerTransactionsModel : PageModel
     {
         private readonly AppDbContext _context;

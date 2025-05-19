@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace IT15_Final_Proj.Pages.Supplier;
 public class EditModel : PageModel
 {
+    //asdasd
     private readonly AppDbContext _context;
     private readonly IWebHostEnvironment _environment;
 

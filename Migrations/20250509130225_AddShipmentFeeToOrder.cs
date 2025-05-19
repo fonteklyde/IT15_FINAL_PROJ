@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-
+//asdasd
 #nullable disable
 
 namespace IT15_Final_Proj.Migrations

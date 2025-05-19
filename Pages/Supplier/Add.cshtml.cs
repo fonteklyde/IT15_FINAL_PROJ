@@ -7,6 +7,7 @@ using System.Security.Claims;
 
 namespace IT15_Final_Proj.Pages.Supplier
 {
+    //asdasd
     public class AddProductModel : PageModel
     {
         private readonly AppDbContext _context;

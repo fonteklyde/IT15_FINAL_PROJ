@@ -7,7 +7,7 @@ namespace IT15_Final_Proj.Migrations
     /// <inheritdoc />
     public partial class AddVendorEmailOrder : Migration
     {
-        /// <inheritdoc />
+        /// <inheritdoc />//asdasd
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(

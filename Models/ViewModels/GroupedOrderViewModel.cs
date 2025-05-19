@@ -12,3 +12,4 @@
         public decimal TotalWithShipping => TotalAmount + ShipmentFee;
     }
 }
+//asdasd

@@ -18,6 +18,8 @@ namespace IT15_Final_Proj.Services
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<DeliveryLocation> DeliveryLocations{ get; set; }
 
+        //asdasd
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

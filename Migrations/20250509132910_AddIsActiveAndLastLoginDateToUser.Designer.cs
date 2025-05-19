@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
-
+//asdasd
 namespace IT15_Final_Proj.Migrations
 {
     [DbContext(typeof(AppDbContext))]

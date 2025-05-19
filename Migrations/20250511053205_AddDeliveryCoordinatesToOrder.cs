@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-
+//asdasd
 namespace IT15_Final_Proj.Migrations
 {
     /// <inheritdoc />

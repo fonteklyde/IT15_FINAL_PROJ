@@ -8,6 +8,7 @@ namespace IT15_Final_Proj.Migrations
     public partial class AddTrackingIdToOrders : Migration
     {
         /// <inheritdoc />
+        /// //asdasd
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(

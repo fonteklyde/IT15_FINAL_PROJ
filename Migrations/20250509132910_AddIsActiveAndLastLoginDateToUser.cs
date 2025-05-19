@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IT15_Final_Proj.Migrations
 {
+    //asdasd
     /// <inheritdoc />
     public partial class AddIsActiveAndLastLoginDateToUser : Migration
     {

@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Azure.Core;
 
 namespace IT15_Final_Proj.Pages.Customer
+
 {
+    //asdasd
     public class CartModel : PageModel
     {
         private readonly AppDbContext _context;
